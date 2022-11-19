@@ -11,11 +11,16 @@ from fastapi import (
 )
 
 import app
-from .. import currency
+from .. import (
+    currency,
+    log_utils
+)
 from . import models
 
 
-router = fastapi.APIRouter()
+router = fastapi.APIRouter(
+    dependencies=[fastapi.Depends(log_utils.log_request_content)]
+)
 
 
 @router.get("/amount/get", response_model=None, response_class=responses.PlainTextResponse)
@@ -29,6 +34,7 @@ async def get_currency(id: str):
         value = await app.app_state.get_balance(currency_name)
 
     except currency.CurrencyError as e:
+        # log_utils.logger.info(f"Request expectedly failed: {e}")
         raise fastapi.HTTPException(
             status.HTTP_404_NOT_FOUND,
             detail=f"Failed to process currency '{id}': {e}"
@@ -47,6 +53,7 @@ async def post_amount(data: models.CurrencyChangeModel):# type: ignore
             await app.app_state.set_balance(k, v)
 
     except currency.CurrencyError as e:
+        # log_utils.logger.info(f"Request expectedly failed: {e}")
         raise fastapi.HTTPException(
             status.HTTP_400_BAD_REQUEST,
             detail=f"Failed to process payload: {e}"
@@ -70,6 +77,7 @@ async def post_modify(data: models.CurrencyChangeModel):# type: ignore
                 await app.app_state.add_balance(k, v)
 
     except currency.CurrencyError as e:
+        # log_utils.logger.info(f"Request expectedly failed: {e}")
         raise fastapi.HTTPException(
             status.HTTP_400_BAD_REQUEST,
             detail=f"Failed to process payload: {e}"
