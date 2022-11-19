@@ -9,6 +9,10 @@ from . import log_utils
 
 
 async def start_server(period: int):
+    """
+    Starts a coro that prints currency reports to stdout every period minutes
+    """
+    period = period * 60
     last_hash = app.app_state.get_current_hash()
     while True:
         new_hash = app.app_state.get_current_hash()
