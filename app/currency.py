@@ -381,6 +381,21 @@ class CurrencyExchanger():
         """
         return self.get_rate_unsafe(in_curr_name) / self.get_rate_unsafe(out_curr_name)
 
+    def get_all_cross_rate(self) -> dict[tuple[str, str], Decimal]:
+        """
+        Returns exchange rates for all possible combination for currencies
+        """
+        rv = {}
+        currencies = tuple(self.__rates.keys())
+
+        for i, curr in enumerate(currencies[:-1]):
+            for next_curr in currencies[i+1:]:
+                # NOTE: we swap currencies because the specifications
+                # require this format of data
+                rv[(curr, next_curr)] = self.get_cross_rate_unsafe(next_curr, curr)
+
+        return rv
+
     def get_current_hash(self) -> int:
         """
         Returns current hash of this object,
