@@ -111,5 +111,5 @@ async def start_currency_fetcher(
         raw_model = _validate(raw_data, scheme_type)
         data = _filter_data(raw_model)
         if data:
-            log_utils.logger.info("Exchange rates were updated")
             await app.app_state.set_exchange_rates(**data)
+            log_utils.logger.info("Exchange rates were updated")

@@ -10,7 +10,7 @@ from decimal import Decimal
 from typing import (
     TypeVar,
     ClassVar,
-    TypeAlias
+    # TypeAlias
 )
 import functools
 from types import MappingProxyType
@@ -305,7 +305,12 @@ class CurrencyManager():
         """
         # Preserve order
         currency_hashes = sorted(
-            (name, curr.get_current_hash()) for name, curr in self.__currencies.items()
+            (
+                (name, curr.get_current_hash())
+                for name, curr
+                in self.__currencies.items()
+            ),
+            key=lambda i: i[0]
         )
         return hash(tuple(currency_hashes))
 
@@ -403,7 +408,13 @@ class CurrencyExchanger():
         this object is MUTABLE
         """
         # Always sort to prevent hash change due to ordering
-        rates = sorted((k, v) for k, v in self.__rates.items())
+        rates = sorted(
+            (
+                (k, v)
+                for k, v in self.__rates.items()
+            ),
+            key=lambda i: i[0]
+        )
         return hash(tuple(rates))
 
     def exchange(self, in_curr_name: str, value: Decimal, out_curr_name: str) -> Decimal:
