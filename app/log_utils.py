@@ -23,7 +23,7 @@ listener: handlers.QueueListener
 
 
 def _should_log_extra() -> bool:
-    return bool(os.environ.get("CSA_DEBUG_MODE", False))
+    return bool(os.environ.get("VERBOSE_LOGS", False))
 
 def _get_app_log_level() -> int:
     if _should_log_extra():

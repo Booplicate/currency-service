@@ -24,9 +24,6 @@ __version__ = "0.1.0"
 app_state: state.State
 
 
-def is_debug_mode() -> bool:
-    return bool(os.environ.get("CSA_DEBUG_MODE", False))
-
 async def main():
     """
     Entry point
@@ -36,7 +33,7 @@ async def main():
     args = arg_parser.parse_args()
 
     if args.debug:
-        os.environ["CSA_DEBUG_MODE"] = "1"
+        os.environ["VERBOSE_LOGS"] = "1"
 
     log_utils.init()
 
@@ -80,8 +77,7 @@ async def main():
     )
 
     # Start
-    if not args.debug:
-        log_utils.logger.info("SERVICE STARTING")
+    log_utils.logger.info("SERVICE STARTING")
     try:
         await asyncio.gather(*tasks)
 
@@ -90,6 +86,5 @@ async def main():
         pass
 
     finally:
-        # if not args.debug:
-        #     log_utils.logger.info("SERVICE STOPPING")
+        log_utils.logger.info("SERVICE STOPPING")
         log_utils.shutdown()

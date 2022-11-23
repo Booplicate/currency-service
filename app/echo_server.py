@@ -15,11 +15,10 @@ async def start_server(period: int):
     period = period * 60
     last_hash = app.app_state.get_current_hash()
     while True:
-        await asyncio.sleep(period)
-
         new_hash = app.app_state.get_current_hash()
         if last_hash != new_hash:
             last_hash = new_hash
             report = await app.app_state.generate_report()
-            if not app.is_debug_mode():
-                log_utils.logger.info(f"Currency report:\n{report}")
+            log_utils.logger.info(f"Currency report:\n{report}")
+
+        await asyncio.sleep(period)
