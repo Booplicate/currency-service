@@ -74,9 +74,10 @@ async def log_request_content(request: fastapi.Request):
     logging request body
     """
     logger.debug(
-        "Request: {} | '{}' | {!r}".format(
+        "Request: {} | '{}' | '{}' | {!r}".format(
             request.client,
             request.method,
+            request.url,
             await request.body()
         )
     )
