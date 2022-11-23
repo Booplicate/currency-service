@@ -10,7 +10,7 @@ from . import (
     models
 )
 from .application import (
-    app,
+    # app,
     add_quit_callback
 )
 
@@ -24,7 +24,7 @@ def build_uvicorn_server(host="0.0.0.0", port=8080) -> uvicorn.Server:
     Builds an ASGI server
     """
     cfg = uvicorn.Config(
-        app,
+        application.app,
         host=host,
         port=port,
         log_level=log_utils.get_lib_log_level()
